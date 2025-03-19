@@ -1,20 +1,19 @@
-// components/Footer.js
 import React from "react";
 import Link from "next/link"; // Next.js Link component for routing
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-700 text-white py-8 px-4 font-sans mb-0">
-      <div className="flex flex-wrap justify-between gap-8 max-w-screen-xl mx-auto">
-        {/* Company Info and Social Media */}
-        <div className="flex-1 min-w-[200px]">
-          <p className="text-lg">700 Sewage Cleaning Services UAE</p>
+    <footer className="bg-blue-700 text-white py-10 px-6 font-sans">
+      <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Company Info */}
+        <div>
+          <h4 className="text-xl font-semibold mb-4">700 Sewage Cleaning Services UAE</h4>
         </div>
 
         {/* Company Links */}
-        <div className="flex-1 min-w-[200px]">
-          <h4 className="text-xl mb-4">Company</h4>
-          <ul>
+        <div>
+          <h4 className="text-xl font-semibold mb-4">Company</h4>
+          <ul className="space-y-2">
             <li>
               <Link
                 href="/about-us"
@@ -23,7 +22,6 @@ const Footer = () => {
                 About Us
               </Link>
             </li>
-
             <li>
               <Link
                 href="/services"
@@ -52,29 +50,29 @@ const Footer = () => {
         </div>
 
         {/* Resources */}
-        <div className="flex-1 min-w-[200px]">
-          <h4 className="text-xl mb-4">Resources</h4>
-          <ul>
+        <div>
+          <h4 className="text-xl font-semibold mb-4">Resources</h4>
+          <ul className="space-y-2">
             <li>Electrical Safety</li>
             <li>Blog</li>
             <li>Energy Efficiency</li>
           </ul>
         </div>
 
-        {/* Contact Now Section */}
-        <div className="flex-1 min-w-[200px]">
-          <h4 className="text-xl mb-4">Contact Now</h4>
+        {/* Contact Now */}
+        <div>
+          <h4 className="text-xl font-semibold mb-4">Contact Now</h4>
           <a
             href="tel:+971555989664"
-            className="inline-block bg-yellow-400 text-black font-bold py-2 px-4 rounded-full transition-all duration-300 hover:bg-green-600 transform hover:scale-105"
+            className="inline-block bg-[#FFA500] text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 hover:bg-[#FF8C00] transform hover:scale-105"
           >
             Call Us Now
           </a>
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="border-t border-white mt-8 pt-4 text-center text-sm">
+      {/* Copyright Section */}
+      <div className="border-t border-white mt-10 pt-6 text-center text-sm">
         <p>
           Copyright © 2025 700Sewag | Design by{" "}
           <Link
@@ -105,22 +103,22 @@ const Footer = () => {
           </Link>
         </p>
 
-        <div className="mt-2 flex justify-center gap-4">
+        <div className="mt-4 flex justify-center gap-6">
           <Link
             href="#terms"
-            className="text-white hover:text-green-600 transition-colors duration-300"
+            className="text-white hover:text-green-400 transition-colors duration-300"
           >
-            Term of use
+            Terms of Use
           </Link>
           <Link
             href="#privacy"
-            className="text-white hover:text-green-600 transition-colors duration-300"
+            className="text-white hover:text-green-400 transition-colors duration-300"
           >
             Privacy Policy
           </Link>
           <Link
             href="#cookies"
-            className="text-white hover:text-green-600 transition-colors duration-300"
+            className="text-white hover:text-green-400 transition-colors duration-300"
           >
             Cookie Policy
           </Link>

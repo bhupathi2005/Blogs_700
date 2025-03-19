@@ -1,20 +1,7 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import parse from "html-react-parser";
-import Navbar from "../../components/navbar";
-import Footer from "../../components/Footer";
-
-// Fetch the blog post by slug
-async function getBlogPostBySlug(slug) {
-  const res = await fetch(
-    "https://public-api.wordpress.com/wp/v2/sites/cleaning988.wordpress.com/posts",
-    { cache: "no-store" }
-  );
-
-  if (!res.ok) return null;
-
-  const posts = await res.json();
-  return posts.find((post) => slugify(post.title.rendered) === slug) || null;
-}
+import Footer from "../../components/footer";
 
 // Fetch all blog posts
 async function getAllBlogPosts() {
@@ -28,106 +15,13 @@ async function getAllBlogPosts() {
   return await res.json();
 }
 
-export default async function BlogPostPage({ params }) {
-  const posts = await getAllBlogPosts();
-  const post = posts.find((p) => slugify(p.title.rendered) === params.slug);
-
-  if (!post) return notFound(); // Show 404 if post not found
-
-  const relatedPosts = posts
-    .filter((p) => p.id !== post.id) // Exclude current post
-    .slice(0, 3);
-
-  return (
-    <>
-      <Navbar />
-      <div className="bg-white text-black min-h-screen p-6 flex flex-col lg:flex-row gap-6">
-        {/* Main Blog Content */}
-        <div className="max-w-3xl w-full bg-white p-6 rounded-lg shadow-md border border-gray-300">
-          {/* Title */}
-          <h1 className="text-3xl font-bold mb-4">
-            {parse(post.title?.rendered || "Untitled")}
-          </h1>
-
-          {/* Featured Image */}
-          {post.jetpack_featured_media_url && (
-            <img
-              src={post.jetpack_featured_media_url}
-              alt="Featured"
-              className="w-full max-w-lg rounded-lg shadow-md"
-            />
-          )}
-
-          {/* Blog Content */}
-          <div className="mt-4 prose prose-lg max-w-none wp-content">
-            {parse(post.content?.rendered || "<p>Content not available.</p>")}
-          </div>
-        </div>
-
-        {/* Sidebar - Recent Posts */}
-        <aside className="w-72 bg-gray-100 p-4 rounded-lg shadow-md border border-gray-300">
-          <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
-          <ul className="space-y-2">
-            {posts.slice(0, 6).map((recentPost) => (
-              <li key={recentPost.id}>
-                <a
-                  href={`/blog/${slugify(recentPost.title.rendered)}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {parse(recentPost.title.rendered)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </aside>
-
-        {/* Related Blogs Section */}
-        <div className="mt-12 w-full">
-          <h2 className="text-2xl font-semibold text-center mb-6">
-            Related Blogs
-          </h2>
-          <div className="flex justify-center gap-6 flex-wrap">
-            {relatedPosts.map((related) => (
-              <div
-                key={related.id}
-                className="w-72 bg-white p-4 rounded-lg shadow-md border border-gray-300"
-              >
-                {/* Related Blog Image */}
-                {related.jetpack_featured_media_url && (
-                  <img
-                    src={related.jetpack_featured_media_url}
-                    alt="Related Blog"
-                    className="w-full h-40 object-cover rounded-md"
-                  />
-                )}
-
-                {/* Title */}
-                <h3 className="text-lg font-semibold mt-3">
-                  {parse(related.title.rendered)}
-                </h3>
-
-                {/* Excerpt - Fixed the paragraph issue */}
-                <div className="text-sm text-gray-600 mt-2">
-                  {parse(related.excerpt.rendered.substring(0, 100))}...
-                </div>
-
-                {/* Read More Button */}
-                <a
-                  href={`/blog/${slugify(related.title.rendered)}`}
-                  className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-md text-center"
-                >
-                  Read More
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </>
-  );
+// Helper function to extract the first image from content
+function extractImage(content) {
+  const match = content.match(/<img[^>]+src="([^"]+)"/);
+  return match ? match[1] : null;
 }
 
+// Helper function to generate slugs
 function slugify(title) {
   return title
     .toLowerCase()
@@ -135,4 +29,163 @@ function slugify(title) {
     .replace(/\s+/g, "-") // Replace spaces with dashes
     .replace(/--+/g, "-") // Remove duplicate dashes
     .trim();
+}
+
+// Function to sanitize content and avoid nested <p> errors
+function sanitizeContent(content) {
+  return content.replace(/<p>\s*<\/p>/g, "").replace(/<p><p>/g, "<p>").replace(/<\/p><\/p>/g, "</p>");
+}
+
+export default async function BlogPostPage({ params }) {
+  const { slug } = params;
+  const posts = await getAllBlogPosts();
+  const post = posts.find((p) => slugify(p.title.rendered) === slug);
+
+  if (!post) return notFound();
+
+  const relatedPosts = posts.filter((p) => p.id !== post.id).slice(0, 3);
+  const recentPosts = posts.slice(0, 6);
+
+  return (
+    <>
+      <div style={{ backgroundColor: "#f3f4f6", minHeight: "100vh", padding: "24px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          {/* Flex Container for Main Content and Recent Posts */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              gap: "24px",
+            }}
+          >
+            {/* Left Side: Main Blog Post and Related Posts */}
+            <div style={{ flex: "1", minWidth: "0" }}>
+              {/* Main Blog Post */}
+              <article
+                style={{
+                  backgroundColor: "#fff",
+                  padding: "24px",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  border: "1px solid #ddd",
+                }}
+              >
+                <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "16px", color: "#111827" }}>
+                  {parse(post.title?.rendered || "Untitled")}
+                </h1>
+
+                {post.jetpack_featured_media_url && (
+                  <img
+                    src={post.jetpack_featured_media_url}
+                    alt={post.title?.rendered || "Blog image"}
+                    style={{ width: "100%", maxWidth: "600px", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)", marginBottom: "16px" }}
+                  />
+                )}
+
+                {/* FIX: Wrap content in <div> to avoid <p> nesting errors */}
+                <div style={{ marginTop: "16px", color: "#374151", padding: "16px", backgroundColor: "#fff", borderRadius: "8px" }}>
+                  {parse(sanitizeContent(post.content?.rendered || "<p>Content not available.</p>"))}
+                </div>
+              </article>
+
+              {/* Related Blogs Section */}
+              <section style={{ marginTop: "48px" }}>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "16px", color: "#111827" }}>Related Blogs</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
+                  {relatedPosts.map((related) => {
+                    const imageUrl =
+                      related.jetpack_featured_media_url ||
+                      extractImage(related.content.rendered);
+                    return (
+                      <div
+                        key={related.id}
+                        style={{
+                          backgroundColor: "#fff",
+                          borderRadius: "8px",
+                          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                          padding: "16px",
+                          transition: "transform 0.2s",
+                          display: "flex",
+                          flexDirection: "column",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {imageUrl && (
+                          <img
+                            src={imageUrl}
+                            alt={related.title.rendered}
+                            style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }}
+                          />
+                        )}
+                        <div style={{ padding: "12px 0", flexGrow: "1" }}>
+                          <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "8px", color: "#111827" }}>
+                            <Link href={`/blog/${slugify(related.title.rendered)}`} style={{ color: "#2563eb", textDecoration: "none" }}>
+                              {parse(related.title.rendered)}
+                            </Link>
+                          </h3>
+                          <div style={{ color: "#4b5563", fontSize: "0.875rem", marginBottom: "12px" }}>
+                            {parse(sanitizeContent(related.excerpt.rendered.substring(0, 100)))}...
+                          </div>
+                          <Link
+                            href={`/blog/${slugify(related.title.rendered)}`}
+                            style={{
+                              display: "inline-block",
+                              padding: "10px 16px",
+                              backgroundColor: "#CAEE5A",
+                              color: "#000",
+                              fontWeight: "bold",
+                              borderRadius: "6px",
+                              textAlign: "center",
+                              textDecoration: "none",
+                            }}
+                          >
+                            Read More
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            </div>
+
+            {/* Right Side: Recent Posts */}
+            <div style={{ width: "30%", minWidth: "250px" }}>
+              <div
+                style={{
+                  backgroundColor: "#fff",
+                  padding: "16px",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <h2
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    marginBottom: "12px",
+                    color: "#111827",
+                  }}
+                >
+                  Recent Posts
+                </h2>
+                <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+                  {recentPosts.map((post) => (
+                    <li key={post.id} style={{ marginBottom: "12px", borderBottom: "1px solid #ddd", paddingBottom: "8px" }}>
+                      <Link href={`/blog/${slugify(post.title.rendered)}`} style={{ color: "#2563eb", textDecoration: "none", fontSize: "1rem", fontWeight: "500" }}>
+                        {post.title.rendered}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 }
