@@ -42,16 +42,23 @@ function sanitizeContent(content) {
     .replace(/<\/p><\/p>/g, "</p>");
 }
 
-export default async function BlogPostPage({ params }) {
+export default async function BlogPostPage({ params: paramsPromise }) {
+  const params = await paramsPromise; // Await params if it's a Promise
+
+  if (!params || !params.slug) return notFound(); // Handle missing slug
+
+  const { slug } = params;
+  console.log("Slug:", slug);
+
   const posts = await getAllBlogPosts();
-  const post = posts.find((p) => p.slug === params.slug);
+  const post = posts.find((p) => p.slug === slug);
 
   if (!post) return notFound();
 
   const relatedPosts = posts
     .filter((p) => p.id !== post.id) // Exclude current post
     .slice(0, 3);
-  const recentPosts = posts.slice(0, 6);
+  const recentPosts = posts.slice(0, 10);
 
   return (
     <>
@@ -100,6 +107,9 @@ export default async function BlogPostPage({ params }) {
                   <Image
                     src={post.jetpack_featured_media_url}
                     alt={post.title?.rendered || "Blog image"}
+                    unoptimized
+                    width={600}
+                    height={400}
                     style={{
                       width: "100%",
                       maxWidth: "600px",
@@ -169,6 +179,9 @@ export default async function BlogPostPage({ params }) {
                           <Image
                             src={imageUrl}
                             alt={related.title.rendered}
+                            unoptimized
+                            width={600}
+                            height={400}
                             style={{
                               width: "100%",
                               height: "180px",

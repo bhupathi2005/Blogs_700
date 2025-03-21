@@ -55,7 +55,7 @@ async function getAllPosts() {
 
 export default async function BlogListPage() {
   const posts = await getAllPosts();
-  const recentPosts = posts.slice(0, 5); // Get latest 5 posts
+  const recentPosts = posts.slice(0, 10); // Get latest 5 posts
 
   return (
     <>
@@ -126,6 +126,9 @@ export default async function BlogListPage() {
                       <Image
                         src={imageUrl}
                         alt={post.title.rendered}
+                        unoptimized
+                        width={600}
+                        height={400}
                         style={{
                           width: "100%",
                           height: "180px",
