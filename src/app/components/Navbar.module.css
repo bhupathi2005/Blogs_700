@@ -1,3 +1,4 @@
+/* Navbar Container */
 .navbar {
   background-color: #1053d4;
   color: #ffffff;
@@ -6,9 +7,9 @@
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
 }
 
+/* Flex container for navigation */
 .container {
   display: flex;
   justify-content: space-between;
@@ -18,23 +19,14 @@
   margin: 0 auto;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.logo img {
-  width: 65px;
-}
-
+/* Menu */
 .menu {
   display: flex;
   gap: 20px;
 }
 
-.menu-item {
+/* Menu Items */
+.menuItem {
   color: #bbbdc3;
   text-decoration: none;
   font-size: 17px;
@@ -44,10 +36,11 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.menu-item:hover {
+.menuItem:hover {
   color: #ffffff;
 }
 
+/* Contact Button */
 .contact {
   color: black;
   text-decoration: none;
@@ -64,13 +57,8 @@
   color: #000000;
 }
 
-/* Active Menu Styles */
-.menu-item.active {
-  color: #ffffff;
-}
-
-/* Menu Toggle Button */
-.menu-toggle {
+/* Menu Toggle Button (Hidden by Default) */
+.menuToggle {
   display: none;
   background: none;
   border: none;
@@ -80,14 +68,11 @@
   padding: 10px;
 }
 
-.menu-toggle:focus {
-  outline: none;
-}
-
-/* Responsive Design */
+/* Responsive Styles */
 @media screen and (max-width: 768px) {
+  /* Show menu as a dropdown */
   .menu {
-    display: none;
+    display: none; /* Hidden by default */
     flex-direction: column;
     background-color: rgba(49, 68, 84, 0.95);
     position: absolute;
@@ -102,13 +87,13 @@
   }
 
   .menu.active {
-    display: flex;
+    display: flex; /* Show menu when active */
     opacity: 1;
     transform: translateY(0);
   }
 
-  .menu-item {
-    padding: 10px;
+  .menuItem {
+    padding: 15px;
     text-align: center;
   }
 
@@ -121,7 +106,7 @@
     margin: 10px 0;
   }
 
-  .menu-toggle {
-    display: block;
+  .menuToggle {
+    display: block; /* Show toggle button */
   }
 }

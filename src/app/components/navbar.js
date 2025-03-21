@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
 import styles from "./Navbar.module.css"; // Import CSS module
 
 const Navbar = () => {
@@ -11,10 +11,17 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const router = useRouter();
 
-  const handleNavClick = (e, path) => {
+  const handleNavClick = (e, sectionId) => {
     e.preventDefault();
-    router.push(path);
-    setMenuOpen(false);
+    const path =
+      sectionId !== "home_section"
+        ? sectionId
+            .replace("_section", "")
+            .replace("contact", "contact")
+            .replace("about", "about-us")
+        : "";
+    router.push(`/${path}`);
+    setMenuOpen(false); // Close menu after navigation
   };
 
   const toggleMenu = () => {
@@ -23,7 +30,11 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        event.target !== document.querySelector(`.${styles.menuToggle}`)
+      ) {
         setMenuOpen(false);
       }
     };
@@ -51,6 +62,12 @@ const Navbar = () => {
           <Link href="/contact" className={styles.menuItem}>
             Contact
           </Link>
+          <Link href="/contact" className={styles.menuItem}>
+            Blogs
+          </Link>
+          <a href="tel:+971555989664" className={styles.contact}>
+            Contact Us
+          </a>
         </div>
         <button className={styles.menuToggle} onClick={toggleMenu}>
           ☰

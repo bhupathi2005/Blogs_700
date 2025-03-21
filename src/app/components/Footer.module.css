@@ -1,119 +1,73 @@
-/* General Footer Styles */
 .footer {
-  background-color: #0046d5;
-  color: #ffffff;
-  padding: 2rem 1rem;
+  background-color: #1053d4;
+  color: white;
+  padding: 40px 20px;
   font-family: Arial, sans-serif;
 }
 
-.footer-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2rem;
+.footerContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.footer-section {
-  flex: 1;
-  min-width: 200px;
+.footerSection h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
-.footer-section h4 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-.footer-section ul {
+.footerSection ul {
   list-style: none;
   padding: 0;
 }
 
-.footer-section ul li {
-  margin-bottom: 0.5rem;
+.footerSection ul li {
+  margin-bottom: 8px;
 }
 
-.footer-section ul li a {
-  color: #ffffff;
+.footerLink {
   text-decoration: none;
-  transition: color 0.3s ease;
+  color: white;
+  transition: color 0.3s;
 }
 
-.footer-section ul li a:hover {
-  color: #ffcc00;
+.footerLink:hover {
+  color: #caee5a;
 }
 
-/* Social Media Icons */
-.footer-social-icons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.footer-social-icons a {
-  color: #ffffff;
-  font-size: 1.5rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-social-icons a:hover {
-  color: #ffcc00;
-}
-
-/* Subscribe Form */
-/* Contact Now Button Style */
-.footer-contact-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #caee5a; /* Blue background for the contact button */
-  color: black;
-  font-size: 16px;
+.footerCompanyName {
+  font-size: 20px;
   font-weight: bold;
+}
+
+.footerContactButton {
+  display: inline-block;
+  background-color: #caee5a;
+  color: black;
+  padding: 10px 20px;
   border-radius: 25px;
-  text-decoration: none;
-  text-align: center;
-  transition: background-color 0.3s, transform 0.3s;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-.footer-contact-button:hover {
-  background-color: #93b430; /* Darker blue on hover */
-  transform: scale(1.05); /* Slight zoom effect on hover */
-}
-
-.footer-subscribe-button:hover {
+.footerContactButton:hover {
   background-color: #93b430;
+  transform: scale(1.05);
 }
 
-/* Footer Bottom Section */
-.footer-bottom {
-  border-top: 1px solid #ffffff;
-  margin-top: 2rem;
-  padding-top: 1rem;
+.footerBottom {
+  border-top: 1px solid white;
+  margin-top: 20px;
+  padding-top: 20px;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
-.footer-bottom p {
-  margin: 0;
-}
-
-.footer-links {
-  margin-top: 0.5rem;
+.footerLinks {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  color: black;
-}
-
-.footer-links a {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: #5e751a;
+  gap: 15px;
+  margin-top: 10px;
 }
