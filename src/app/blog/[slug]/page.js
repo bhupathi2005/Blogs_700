@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import parse from "html-react-parser";
-import Footer from "../../components/footer";
+import Footer from "@/app/components/footer";
+
 import he from "he";
 import Image from "next/image";
 
