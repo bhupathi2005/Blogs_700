@@ -2,27 +2,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-
 import styles from "./Navbar.module.css"; // Import CSS module
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-  const router = useRouter();
-
-  const handleNavClick = (e, sectionId) => {
-    e.preventDefault();
-    const path =
-      sectionId !== "home_section"
-        ? sectionId
-            .replace("_section", "")
-            .replace("contact", "contact")
-            .replace("about", "about-us")
-        : "";
-    router.push(`/${path}`);
-    setMenuOpen(false); // Close menu after navigation
-  };
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);

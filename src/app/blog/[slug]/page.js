@@ -3,6 +3,7 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import Footer from "../../components/footer";
 import he from "he";
+import Image from "next/image";
 
 // Fetch all blog posts
 async function getAllBlogPosts() {
@@ -15,9 +16,6 @@ async function getAllBlogPosts() {
 
   return await res.json();
 }
-const stripTags = (html) => {
-  return he.decode(html.replace(/<\/?[^>]+(>|$)/g, ""));
-};
 
 // Helper function to extract the first image from content
 function extractImage(content) {
@@ -98,7 +96,7 @@ export default async function BlogPostPage({ params }) {
                 </h1>
 
                 {post.jetpack_featured_media_url && (
-                  <img
+                  <Image
                     src={post.jetpack_featured_media_url}
                     alt={post.title?.rendered || "Blog image"}
                     style={{
@@ -167,7 +165,7 @@ export default async function BlogPostPage({ params }) {
                         }}
                       >
                         {imageUrl && (
-                          <img
+                          <Image
                             src={imageUrl}
                             alt={related.title.rendered}
                             style={{

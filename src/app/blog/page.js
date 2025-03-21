@@ -2,6 +2,7 @@ import Link from "next/link";
 import he from "he";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import Image from "next/image";
 
 // Helper function to extract the first image from content
 function extractImage(content) {
@@ -121,7 +122,7 @@ export default async function BlogListPage() {
                     }}
                   >
                     {imageUrl && (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt={post.title.rendered}
                         style={{
