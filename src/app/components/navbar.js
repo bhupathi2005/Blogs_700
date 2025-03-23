@@ -46,7 +46,7 @@ const Navbar = () => {
           <Link href="/contact" className={styles.menuItem}>
             Contact
           </Link>
-          <Link href="/contact" className={styles.menuItem}>
+          <Link href="/blog" className={styles.menuItem}>
             Blogs
           </Link>
           <a href="tel:+971555989664" className={styles.contact}>

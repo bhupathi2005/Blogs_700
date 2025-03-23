@@ -3,6 +3,7 @@ import he from "he";
 import Navbar from "../components/navbar";
 import Footer from "@components/Footer";
 import Image from "next/image";
+import Footer from "../components/footer";
 
 // Helper function to extract the first image from content
 function extractImage(content) {
@@ -29,27 +30,38 @@ function slugify(title) {
 async function getAllPosts() {
   let allPosts = [];
   let page = 1;
-  let hasMore = true;
+  const maxPosts = 50;
 
-  while (hasMore) {
-    const res = await fetch(
-      `https://public-api.wordpress.com/wp/v2/sites/cleaning988.wordpress.com/posts?per_page=10&page=${page}`,
-      { cache: "no-store" }
-    );
+  try {
+    while (allPosts.length < maxPosts) {
+      console.log(`Fetching page ${page}...`);
+      const res = await fetch(
+        `https://public-api.wordpress.com/wp/v2/sites/cleaning988.wordpress.com/posts?per_page=10&page=${page}`,
+        { next: { revalidate: 60 } }
+      );
 
-    if (!res.ok) break;
+      if (!res.ok) {
+        console.warn(`Failed to fetch page ${page}: Status ${res.status}`);
+        break; // Stop fetching if error
+      }
 
-    const data = await res.json();
-    allPosts = [...allPosts, ...data];
+      const data = await res.json();
+      if (data.length === 0) break;
 
-    if (data.length < 10) {
-      hasMore = false; // Stop fetching if fewer than 10 posts are returned
-    } else {
-      page++; // Continue to next page
+      allPosts = [...allPosts, ...data];
+      if (allPosts.length >= maxPosts) {
+        allPosts = allPosts.slice(0, maxPosts);
+        break;
+      }
+
+      page++;
     }
+  } catch (error) {
+    console.error("Error fetching posts:", error);
   }
 
-  return allPosts;
+  console.log(`Total posts fetched: ${allPosts.length}`);
+  return allPosts; // ✅ Always return an array to avoid build errors
 }
 
 export default async function BlogListPage() {
@@ -67,15 +79,7 @@ export default async function BlogListPage() {
           padding: "24px",
         }}
       >
-        <div
-          style={{
-            maxWidth: "72rem",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr",
-            gap: "24px",
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6 max-w-6xl mx-auto px-4">
           {/* Left Side: Blog Posts */}
           <div>
             <h1
@@ -97,13 +101,7 @@ export default async function BlogListPage() {
             >
               Stay updated with our latest insights and articles.
             </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "32px",
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {posts.map((post) => {
                 const imageUrl =
                   post.jetpack_featured_media_url ||
@@ -188,7 +186,7 @@ export default async function BlogListPage() {
           </div>
 
           {/* Right Side: Recent Posts Section */}
-          <div style={{ width: "100%" }}>
+          <div className="w-full mt-8 md:mt-0">
             <div
               style={{
                 backgroundColor: "#fff",
